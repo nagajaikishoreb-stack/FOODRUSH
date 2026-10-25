@@ -1,0 +1,6 @@
+{
+  "name": "FoodRush - Food Delivery & Reward Platform",
+  "description": "Production-ready food delivery platform with instant ₹20 rewards, mobile recharge, smart cart, transparent pricing, and live tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

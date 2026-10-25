@@ -1,0 +1,775 @@
+# PROJECT: Build a Production-Ready Food Delivery Platform
+
+Act as a senior full-stack developer, UI/UX designer, software architect, database engineer, cybersecurity specialist, and DevOps engineer.
+
+Build a complete, modern, scalable food delivery application that aims to compete with Swiggy and Zomato by providing better customer rewards, transparent pricing, intelligent recommendations, reliable delivery tracking, affordable meals, and a superior user experience.
+
+The application must be a real, functional full-stack website, not merely a static design or frontend demo.
+
+## 1. BRAND IDENTITY AND DESIGN
+
+Create a unique brand identity.
+
+Temporary brand name: **FoodRush**
+
+Use a premium, modern, mobile-first design with:
+- Attractive colors and a consistent design system.
+- Smooth animations without affecting performance.
+- Beautiful restaurant cards and food images.
+- Clean typography and intuitive navigation.
+- Responsive layouts for mobile phones, tablets, laptops, and desktops.
+- Light and dark themes.
+- Accessible forms, buttons, and navigation.
+- Skeleton loaders, empty states, error messages, and retry buttons.
+- Fast page loading and optimized images.
+
+Create a polished homepage with:
+- Location selector.
+- Search bar for food, dishes, and restaurants.
+- Restaurant categories.
+- Trending dishes.
+- Popular restaurants.
+- Today's best deals.
+- Recommended food based on user preferences.
+- Nearby restaurants.
+- Budget-friendly meals.
+- Reward wallet balance.
+- Active coupons.
+- Order tracking shortcut.
+
+Do not copy the proprietary branding or exact design of existing competitors.
+
+## 2. USER AUTHENTICATION AND PROFILES
+
+Implement secure authentication with:
+- Email and password.
+- Phone number authentication through a verified OTP provider.
+- Google sign-in when configured.
+- Password reset.
+- Secure logout.
+- Session expiration and renewal.
+- User profile management.
+- Multiple saved delivery addresses.
+- Favorite restaurants and dishes.
+- Dietary preferences and allergy information.
+- Order history.
+- Reorder functionality.
+- Account deletion and personal data controls.
+
+Never store plaintext passwords or expose authentication secrets in frontend code.
+
+Provide a demo mode only when explicitly configured. Clearly distinguish demo transactions from real transactions.
+
+## 3. RESTAURANT DISCOVERY
+
+Build a complete restaurant discovery system.
+
+Features:
+- Search restaurants by name, cuisine, dish, or location.
+- Filters for price, rating, delivery time, distance, offers, vegetarian food, and availability.
+- Sort by relevance, rating, price, delivery time, and popularity.
+- Restaurant menus with categories.
+- Food images, descriptions, ingredients, prices, and availability.
+- Veg and non-veg indicators.
+- Add-ons, sizes, customizations, and special instructions.
+- Restaurant operating hours.
+- Estimated delivery time.
+- Minimum order amount, if applicable.
+- Transparent restaurant fees and delivery fees.
+- Customer ratings and verified order reviews.
+- Out-of-stock handling.
+- Similar dish recommendations.
+
+Do not show unavailable restaurants as orderable.
+
+## 4. UNIQUE ₹20 REWARD SYSTEM — CORE FEATURE
+
+Implement a reliable customer loyalty system.
+
+### Reward rules
+
+For every successfully completed and eligible order, credit a reward voucher worth ₹20 to the customer's reward wallet.
+
+Rules:
+1. Each eligible completed order earns exactly one ₹20 reward voucher.
+2. Do not award rewards merely because an order was placed.
+3. Award rewards only after the order reaches the configured qualifying status, preferably delivered and confirmed.
+4. A cancelled, failed, refunded, or otherwise ineligible order must not receive a reward.
+5. Each qualifying order must receive its reward only once.
+6. If an order is refunded after a reward was issued, apply the published reward reversal policy.
+7. Store a unique order reference for every reward transaction.
+8. Display the reward status: pending, available, redeemed, expired, or reversed.
+9. Display the wallet balance and transaction history in real time.
+10. Clearly explain reward eligibility and expiry rules to users.
+
+### Two reward balances
+
+Keep the following balances separate:
+
+**A. Food Reward Balance**
+- Contains eligible promotional rewards.
+- Can be used toward future eligible food orders.
+- Can be combined with permitted discount coupons.
+- Cannot be withdrawn to a bank account.
+- Cannot be transferred to another user.
+- Cannot be converted to cash.
+- Cannot be used beyond the available balance.
+- Must follow configurable minimum order and maximum redemption limits.
+
+**B. Mobile Recharge Reward Balance**
+- Contains rewards specifically eligible for mobile recharges.
+- Can be used to recharge supported mobile numbers and operators.
+- Cannot be withdrawn to a bank account.
+- Cannot be transferred to another user.
+- Must be redeemed through a legitimate, authorized recharge service.
+- Must support transaction status checks, failures, and refunds.
+
+Maintain separate ledger entries for these balances. Do not let users spend the same reward twice.
+
+### Example reward calculation
+
+Order 1:
+- Eligible reward earned: ₹20.
+- Food Reward Balance: ₹20.
+- Mobile Recharge Reward Balance: ₹0.
+
+Order 2:
+- Eligible reward earned: ₹20.
+- Food Reward Balance: ₹40.
+- Mobile Recharge Reward Balance: ₹0.
+
+If the user chooses to allocate ₹20 from the eligible reward balance to mobile recharge, the available balances should update only after the transfer is validated and committed successfully.
+
+If the user spends ₹15 of the food reward balance on a later order, the remaining food reward balance is ₹25.
+
+### Reward redemption interface
+
+Create a dedicated Rewards page containing:
+- Total available rewards.
+- Food redemption balance.
+- Mobile recharge redemption balance.
+- Pending rewards.
+- Lifetime rewards earned.
+- Reward transaction history.
+- Redeem for food button.
+- Mobile recharge button.
+- Reward expiry information.
+- Reward terms and conditions.
+- Clear messages when a redemption is not permitted.
+
+IMPORTANT: Configure reward allocation rules explicitly. Never create money from nothing, double-credit a reward, or treat a reward transfer between balances as a new reward.
+
+If regulatory or payment-provider requirements prevent a particular wallet feature, explain the limitation and provide a compliant alternative.
+
+## 5. MOBILE RECHARGE FEATURE
+
+Build a dedicated mobile recharge page.
+
+Required fields:
+- Mobile number.
+- Country.
+- Telecom operator.
+- Prepaid or postpaid, depending on provider support.
+- Available recharge plans.
+- Recharge amount.
+- Applicable reward balance.
+- Final payable amount.
+- Confirmation screen.
+
+Recharge workflow:
+1. Validate the mobile number and supported operator.
+2. Fetch current recharge plans through the authorized provider.
+3. Display the selected plan and total cost.
+4. Show the amount payable using eligible rewards.
+5. Ask the customer to confirm.
+6. Create a unique recharge transaction.
+7. Submit the request securely to the recharge provider.
+8. Verify the final transaction status.
+9. Deduct rewards only according to the confirmed transaction and reservation policy.
+10. Refund or release reserved rewards if the recharge fails.
+11. Handle pending transactions without creating duplicate recharges.
+12. Display a receipt and transaction ID.
+
+Never claim that a recharge succeeded based only on a frontend response.
+
+Do not hardcode imaginary telecom operators, recharge plans, APIs, or transaction results. Use a sandbox when credentials are unavailable.
+
+## 6. ADVANCED DISCOUNT COUPON SYSTEM
+
+Build a complete coupon engine.
+
+Example coupons:
+- WELCOME50: 50% off, maximum discount ₹50, subject to configured eligibility.
+- FOOD20: ₹20 off eligible food orders.
+- SAVE100: ₹100 off orders meeting a configured minimum amount.
+- FREEDELIVERY: waives an eligible delivery fee.
+- LUNCH15: 15% off qualifying lunch orders.
+- WEEKEND75: ₹75 off qualifying weekend orders.
+- VEGDEAL: discount on eligible vegetarian items.
+- BUDDY100: a referral promotion with configurable eligibility.
+- LOYALTY30: additional discount for eligible returning customers.
+
+These are example promotions. Store all coupon rules in the database and activate them only when configured by an administrator.
+
+Each coupon must support:
+- Start and expiration dates.
+- Minimum order value.
+- Maximum discount.
+- Percentage or fixed discount.
+- Eligible users and restaurants.
+- Eligible products and categories.
+- Usage limits per user.
+- Global redemption limits.
+- First-order restrictions.
+- Valid days and time windows.
+- Stacking rules.
+- Active, paused, expired, and exhausted statuses.
+- Server-side eligibility verification.
+
+Display available coupons at checkout.
+
+Automatically recommend the best eligible coupon based on the customer's actual savings.
+
+Never apply a coupon that is expired, exhausted, invalid, or incompatible with another offer.
+
+Show the original amount, item discounts, coupon discount, reward redemption, delivery fee, taxes, and final payable amount separately.
+
+Prevent coupon abuse, repeated redemption, and client-side price manipulation.
+
+## 7. SMART CART AND CHECKOUT
+
+Implement:
+- Add to cart and remove from cart.
+- Update quantities.
+- Food customizations and add-ons.
+- Restaurant-specific cart validation.
+- Clear handling when the cart contains items from different restaurants.
+- Item availability revalidation.
+- Minimum order validation.
+- Coupon application.
+- Reward redemption.
+- Delivery address selection.
+- Delivery instructions.
+- Scheduled ordering where supported.
+- Secure payment gateway integration.
+- Order confirmation and receipt.
+
+Calculate the final price on the backend using trusted database values.
+
+Never trust prices, discounts, wallet balances, or payment status submitted by the browser.
+
+Use integer paise or an appropriate decimal money type to avoid floating-point currency errors.
+
+Show the final payable amount before payment confirmation.
+
+## 8. PAYMENTS
+
+Support an authorized payment gateway such as Razorpay or another suitable provider, subject to account approval and availability.
+
+Payment options may include:
+- UPI.
+- Cards.
+- Net banking.
+- Other provider-supported methods.
+- Cash on delivery, if operationally supported.
+
+Implement:
+- Server-side payment order creation.
+- Signature verification.
+- Verified payment webhooks.
+- Idempotent payment processing.
+- Payment status reconciliation.
+- Failed payment recovery.
+- Duplicate callback protection.
+- Refund tracking.
+- Secure transaction history.
+
+Never store card details or UPI PINs directly.
+
+Do not mark an order as paid based on a success screen alone.
+
+Keep promotional rewards separate from cash payment balances. The promotional reward wallet must never provide a withdrawal feature.
+
+## 9. REAL-TIME ORDER TRACKING
+
+Build a complete order lifecycle:
+
+- Order placed.
+- Payment confirmed.
+- Restaurant accepted.
+- Food preparation.
+- Ready for pickup.
+- Delivery partner assigned.
+- Picked up.
+- Out for delivery.
+- Delivered.
+
+Additional features:
+- Live status updates.
+- Estimated delivery time.
+- Map integration when configured.
+- Delivery partner contact options.
+- Cancellation eligibility.
+- Refund status.
+- Order notifications.
+- Delay alerts.
+- Support access.
+
+Use WebSockets or a managed real-time service where appropriate, with polling as a fallback.
+
+Do not expose a delivery partner's private location or personal information without authorization.
+
+## 10. DELIVERY PARTNER FEATURES
+
+Create a dedicated delivery partner dashboard.
+
+Features:
+- Secure delivery partner login.
+- Availability toggle.
+- Assigned deliveries.
+- Accept or reject assignments according to business rules.
+- Pickup and delivery verification.
+- Navigation links.
+- Order status updates.
+- Delivery history.
+- Earnings summary.
+- Support and incident reporting.
+
+Protect customer addresses and phone numbers from unauthorized access.
+
+## 11. RESTAURANT OWNER DASHBOARD
+
+Allow approved restaurant owners to:
+- Manage restaurant profiles.
+- Update menus and prices.
+- Add or remove food items.
+- Set item availability.
+- Accept or reject orders.
+- Update preparation status.
+- Manage opening hours.
+- Configure eligible restaurant promotions.
+- View order history.
+- View sales and order analytics.
+
+Require server-side role checks for every protected operation.
+
+Restaurant owners must not be able to change customer reward balances or platform-wide coupon rules.
+
+## 12. ADMIN DASHBOARD
+
+Create a secure platform administration panel.
+
+Features:
+- Customer management.
+- Restaurant approval and suspension.
+- Delivery partner management.
+- Order monitoring.
+- Coupon creation and management.
+- Reward policy configuration.
+- Reward ledger audit.
+- Refund and dispute monitoring.
+- Recharge transaction monitoring.
+- Payment reconciliation.
+- Fraud detection.
+- Platform fees and commission settings.
+- Sales reports.
+- User support management.
+- Audit logs.
+
+Use role-based access control.
+
+Require additional verification for sensitive administrative operations.
+
+Never expose admin credentials or privileged API keys in frontend code.
+
+## 13. CUSTOMER SUPPORT
+
+Implement:
+- Order-related support tickets.
+- FAQ section.
+- Cancellation assistance.
+- Refund assistance.
+- Missing or incorrect item reporting.
+- Recharge failure support.
+- Coupon issue reporting.
+- Contact support options.
+- Ticket status tracking.
+
+An AI support assistant may answer FAQs and summarize issues, but it must not independently approve refunds or alter wallet balances without authorized backend workflows.
+
+## 14. INTELLIGENT FEATURES
+
+Add features that can create a meaningful competitive advantage:
+
+- Personalized restaurant recommendations.
+- Food discovery based on budget.
+- AI-assisted dish search using natural language.
+- Meal recommendations based on preferences.
+- Dietary and allergen filters.
+- Smart reorder suggestions.
+- Group ordering with individual item selection.
+- Shared carts with controlled payment workflows.
+- Transparent price comparison among participating restaurants.
+- Subscription plans with clearly stated benefits.
+- Scheduled meal reminders with user consent.
+- Low-cost meal discovery.
+- Loyalty milestones.
+- Birthday rewards with eligibility checks.
+- Referral rewards with fraud prevention.
+- Personalized offers with privacy controls.
+- Price-drop notifications where supported.
+
+AI-generated allergen or dietary information must not replace verified restaurant ingredient information.
+
+## 15. DATABASE DESIGN
+
+Use a reliable relational database such as PostgreSQL or another appropriate production database.
+
+Design normalized tables for:
+- users
+- user_profiles
+- addresses
+- restaurants
+- restaurant_hours
+- menu_categories
+- menu_items
+- menu_item_variants
+- carts
+- cart_items
+- orders
+- order_items
+- order_status_history
+- payments
+- payment_events
+- coupons
+- coupon_redemptions
+- reward_accounts
+- reward_ledger
+- reward_reservations
+- recharge_transactions
+- delivery_partners
+- delivery_assignments
+- reviews
+- support_tickets
+- notifications
+- audit_logs
+- admin_roles
+
+Use foreign keys, indexes, unique constraints, database transactions, and appropriate deletion policies.
+
+Store all important timestamps consistently and display them in the user's local timezone.
+
+Use database migrations and version control for schema changes.
+
+## 16. CRITICAL WALLET AND ORDER CONSISTENCY
+
+Implement the wallet and ordering system with transaction safety.
+
+Requirements:
+- Every wallet transaction must have a unique identifier.
+- Every reward must reference its qualifying order.
+- Use database transactions for balance-affecting operations.
+- Use row locking or another appropriate concurrency-control strategy.
+- Prevent negative balances.
+- Prevent simultaneous requests from spending the same reward twice.
+- Use idempotency keys for order, payment, recharge, and reward operations.
+- Use a unique constraint to prevent multiple reward grants for one qualifying order.
+- Record debits, credits, reversals, expirations, and reservations in an immutable ledger.
+- Derive or reconcile balances from the ledger.
+- Keep an auditable transaction history.
+- Never delete ledger entries to hide mistakes.
+- Reconcile payment and recharge provider statuses.
+- Use a transactional outbox or another reliable mechanism for important asynchronous events.
+- Handle partial failures without duplicating financial operations.
+
+For redemption, reserve the reward amount atomically before processing an external operation. Commit the debit when the operation reaches its defined successful state, or release the reservation when it definitively fails. Handle uncertain and pending outcomes through reconciliation rather than blind retries.
+
+## 17. WEBSITE RELIABILITY — PREVENT CRASHES
+
+Build the application with a reliability-first engineering approach.
+
+Important: No developer can honestly guarantee that a website will never crash under every possible condition. Instead, implement strong prevention, detection, recovery, and graceful degradation.
+
+Frontend requirements:
+- Component-level error boundaries.
+- Friendly fallback screens.
+- Form validation.
+- Loading indicators.
+- Request timeouts.
+- Retry controls for safe operations.
+- Protection against repeated button clicks.
+- Cancellation of obsolete requests.
+- Safe handling of empty, null, or malformed API responses.
+- Responsive layouts.
+- Pagination or virtualization for large lists.
+- Lazy loading where appropriate.
+- No infinite rendering loops.
+- No uncontrolled polling.
+- No unhandled promise rejections.
+- No exposed secrets.
+- Avoid unnecessary large dependencies.
+
+Backend requirements:
+- Centralized error handling.
+- Input validation and sanitization.
+- Authentication and authorization middleware.
+- Database connection pooling.
+- Query timeouts.
+- Rate limiting.
+- Request size limits.
+- Idempotent mutation endpoints.
+- Graceful shutdown.
+- Structured logs.
+- Health-check endpoints.
+- Dependency timeouts.
+- Bounded retries with exponential backoff and jitter.
+- Circuit breakers for unreliable external services where appropriate.
+- Queue-based processing for appropriate background tasks.
+- Database backup and recovery procedures.
+- Monitoring for API latency, errors, and resource usage.
+
+Do not automatically retry a payment, recharge, refund, or other financial operation unless the retry mechanism is idempotent and the operation's status has been handled safely.
+
+Do not rely solely on frontend error handling to protect financial data.
+
+## 18. SECURITY
+
+Follow modern application security practices.
+
+Implement:
+- Server-side validation.
+- Secure authentication and session management.
+- Role-based authorization.
+- CSRF protection where applicable.
+- XSS protection.
+- SQL injection prevention.
+- Secure HTTP headers.
+- HTTPS in production.
+- Rate limiting and abuse prevention.
+- Secure secrets management.
+- Webhook signature verification.
+- Protection against IDOR and unauthorized object access.
+- Audit logs for sensitive actions.
+- Privacy-conscious logging.
+- Dependency vulnerability checks.
+- Data minimization.
+- Secure file uploads if uploads are supported.
+
+Never commit .env files, private keys, API tokens, or production credentials to source control.
+
+## 19. PERFORMANCE AND SCALABILITY
+
+Optimize the website for real-world use.
+
+Implement:
+- Responsive image sizes and modern image formats.
+- Lazy loading for noncritical images.
+- Database indexes based on actual queries.
+- Pagination for restaurant lists and order history.
+- Caching for safe, non-sensitive read operations.
+- Cache invalidation when data changes.
+- Efficient database queries.
+- Background processing for suitable tasks.
+- CDN support for static assets.
+- Production build optimization.
+- Load testing and stress testing.
+- Monitoring of CPU, memory, latency, and error rates.
+
+Use a modular architecture that can scale from a small prototype to a larger production deployment.
+
+Do not add microservices unnecessarily to a small initial application.
+
+## 20. TESTING
+
+Create automated tests before declaring the application complete.
+
+Unit tests:
+- Coupon calculations.
+- Reward calculations.
+- Order totals.
+- Validation rules.
+- Wallet eligibility.
+
+Integration tests:
+- User authentication.
+- Restaurant menu APIs.
+- Order creation.
+- Payment verification.
+- Reward crediting.
+- Wallet redemption.
+- Mobile recharge.
+- Coupon redemption.
+- Refund handling.
+
+Concurrency tests:
+- Two simultaneous reward redemptions.
+- Duplicate payment webhooks.
+- Duplicate order requests.
+- Duplicate reward-grant events.
+- Simultaneous coupon redemptions near the usage limit.
+
+End-to-end tests:
+- Register and sign in.
+- Browse restaurants.
+- Add items to cart.
+- Apply a coupon.
+- Complete a test payment.
+- Track an order.
+- Earn a ₹20 reward after a qualifying delivery.
+- Use rewards on a future order.
+- Attempt a mobile recharge in sandbox mode.
+- Verify that withdrawals are unavailable.
+
+Failure tests:
+- Database temporarily unavailable.
+- Payment provider timeout.
+- Recharge provider timeout.
+- Invalid API responses.
+- Network disconnection.
+- Expired session.
+- Out-of-stock items.
+- Duplicate requests.
+- Failed deployments.
+
+Use mocks and sandbox environments for external payment and recharge providers.
+
+Never use real financial transactions during automated tests.
+
+## 21. REQUIRED PAGES
+
+Build the following complete pages:
+
+1. Home
+2. Sign up
+3. Login
+4. Forgot password
+5. Restaurant listings
+6. Search results
+7. Restaurant details
+8. Food item details
+9. Shopping cart
+10. Checkout
+11. Payment result
+12. Order confirmation
+13. Live order tracking
+14. Order history
+15. Customer profile
+16. Saved addresses
+17. Rewards wallet
+18. Mobile recharge
+19. Coupon center
+20. Favorites
+21. Customer support
+22. Delivery partner dashboard
+23. Restaurant owner dashboard
+24. Admin dashboard
+25. Terms and conditions
+26. Privacy policy
+27. Reward policy
+28. Refund and cancellation policy
+29. Not-found page
+30. General error page
+
+All routes must work correctly, including direct navigation and page refreshes.
+
+## 22. SUGGESTED TECHNOLOGY STACK
+
+Choose a compatible, maintainable stack.
+
+Preferred option:
+- Frontend: Next.js with React and TypeScript.
+- Styling: Tailwind CSS.
+- Backend: Next.js server routes or a separately deployed Node.js API.
+- Database: PostgreSQL.
+- ORM: Prisma or Drizzle.
+- Authentication: A maintained authentication library or managed authentication provider.
+- Real-time updates: Managed real-time service or WebSockets.
+- Payments: An authorized payment gateway.
+- Maps: A supported maps provider.
+- Hosting: A suitable frontend and backend hosting provider.
+- Monitoring: Error tracking and structured application logs.
+- Testing: Vitest or Jest, API integration tests, and Playwright.
+
+If the selected AI development platform supports a different stack better, choose one compatible stack and explain the reason. Do not mix incompatible libraries or invent APIs.
+
+## 23. ENVIRONMENT AND DEPLOYMENT
+
+Provide:
+- Complete project directory structure.
+- All required source files.
+- Database schema and migrations.
+- Example .env.example file containing placeholders only.
+- Installation instructions.
+- Local development instructions.
+- Database setup instructions.
+- Test commands.
+- Production build commands.
+- Deployment instructions.
+- Health-check configuration.
+- Backup and recovery instructions.
+- Troubleshooting guide.
+
+The application must start without missing imports, undefined variables, broken routes, or unresolved dependencies.
+
+Never claim that the website is deployed, tested, or connected to real services unless that work has actually been completed.
+
+## 24. IMPLEMENTATION STRATEGY
+
+Build in phases:
+
+Phase 1: Project setup, design system, navigation, and responsive layouts.
+
+Phase 2: Authentication, database, restaurant listings, search, and menus.
+
+Phase 3: Cart, checkout, order creation, and payment integration.
+
+Phase 4: ₹20 rewards, wallet ledger, discount coupons, and redemption.
+
+Phase 5: Mobile recharge integration using an authorized provider.
+
+Phase 6: Restaurant dashboard, delivery partner dashboard, and admin panel.
+
+Phase 7: Real-time tracking, notifications, and customer support.
+
+Phase 8: Automated tests, concurrency tests, security checks, performance optimization, and deployment.
+
+After each phase:
+- Run the application.
+- Check the browser console.
+- Check server logs.
+- Run relevant tests.
+- Fix errors before continuing.
+- Verify that previously completed features still work.
+
+If the development environment cannot run a command or access an external service, state the limitation and provide the next required step.
+
+## 25. FINAL ACCEPTANCE CRITERIA
+
+The project is complete only when:
+
+- All major pages render correctly.
+- All navigation links work.
+- User authentication functions correctly.
+- Restaurant search and filtering work.
+- Cart calculations are correct.
+- Coupons are validated on the backend.
+- Payments are verified securely.
+- Eligible completed orders receive exactly one ₹20 reward.
+- Reward balances cannot become negative.
+- Reward redemption cannot be duplicated.
+- Rewards cannot be withdrawn as cash.
+- Mobile recharge works through a verified integration or is clearly marked as sandbox/demo-only.
+- Failed transactions are handled safely.
+- Order tracking reflects actual backend state.
+- Admin permissions are enforced.
+- Database migrations work.
+- Automated tests pass.
+- Production builds succeed.
+- Error handling and logging work.
+- The deployment and configuration instructions are complete.
+
+Start by generating the architecture and complete project structure. Then implement the application in manageable phases, writing real source code rather than placeholder pages.
+
+Prioritize correctness, financial consistency, security, accessibility, maintainability, and reliability over unnecessary animations or superficial features.
+
+At the end, provide the exact commands to install, run, test, build, and deploy the application.
